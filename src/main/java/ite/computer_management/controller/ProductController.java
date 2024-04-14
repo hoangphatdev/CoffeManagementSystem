@@ -31,17 +31,13 @@ public class ProductController implements MouseListener , KeyListener{
 			
 		}else if(e.getSource() == productView.seeDetailLbl) {
 			
+		}else if(e.getSource() == productView.excelBtn) {
+			productView.clickExportExcel();
 		}
-//		else if(e.getSource() == productView.refreshBtn) {
-//			productView.clickRefreshBtn();
-//		}
-
-		
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
 		
 	}
 
@@ -55,25 +51,21 @@ public class ProductController implements MouseListener , KeyListener{
 
 	@Override
 	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
 		
 	}
 

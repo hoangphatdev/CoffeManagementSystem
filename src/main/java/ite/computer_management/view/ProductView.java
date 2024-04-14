@@ -1,10 +1,18 @@
 package ite.computer_management.view;
 
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
 import javax.swing.JPanel; 
 
 import java.awt.Color;
+import java.awt.Desktop;
 
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.SwingConstants;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
@@ -18,7 +26,14 @@ import javax.swing.JTable;
 import javax.swing.RowFilter;
 import javax.swing.JTextField;
 import javax.swing.JButton;
+import javax.swing.JFileChooser;
+
 import java.awt.Font;
+import java.awt.print.PageFormat;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 
 public class ProductView extends JPanel {
 	public JLabel seeDetailLbl;
@@ -29,12 +44,9 @@ public class ProductView extends JPanel {
 	private static final long serialVersionUID = 1L;
 	public static JTable table;
 	public JTextField searchTxt;
-	public JButton refreshBtn;
-	public static void main(String[]args) {
-//		ProductView pr = new ProductView(t);
-//		pr.setVisible(true);
-	}
-
+	public JButton excelBtn;
+	
+	
 
 	/**
 	 * Create the panel.
@@ -106,11 +118,10 @@ public class ProductView extends JPanel {
 		searchLbl.setBounds(616, 10, 86, 40);
 		add(searchLbl);
 		
-		refreshBtn = new JButton("Refresh");
-		refreshBtn.setFont(new Font("Roboto", Font.BOLD, 12));
-		refreshBtn.setBounds(936, 11, 86, 39);
-		refreshBtn.addMouseListener(productController);
-		add(refreshBtn);
+		excelBtn = new JButton("Excel");
+		excelBtn.setBounds(958, 77, 64, 52);
+		excelBtn.addMouseListener(productController);
+		add(excelBtn);
 		
 	}
 	public void clickDeleteLbl() {
@@ -131,16 +142,63 @@ public class ProductView extends JPanel {
 		table.setRowSorter(trs);
 		trs.setRowFilter(RowFilter.regexFilter(searchTxt.getText()));
 	}
-//	public void clickRefreshBtn() {
-//		searchTxt.setText(null);
-//		int rowCount = model.getRowCount();
-//		for(int i = 0; i<= rowCount; i++) {
-//			model.removeRow(0);
-//		}
-//		table.setModel(model);
-//		
-//		
-//		ProductDAO.getInstance().selectAll();
-//		table.setModel(model);
-//	}
+	public void openFile(String file) {
+		try {
+			File path = new File(file);
+			Desktop.getDesktop().open(path);
+		} catch (IOException e) {
+			JOptionPane.showMessageDialog(null,"Error: " + e);
+		}
+		
+	}
+	public void clickExportExcel() {
+		JFileChooser jFileChooser = new JFileChooser();
+		jFileChooser.showSaveDialog(this);
+		File saveFile = jFileChooser.getSelectedFile();
+		
+		if(saveFile != null) {
+			saveFile = new File(saveFile.toString() + ".xlsx");
+			Workbook wb = new XSSFWorkbook();
+			Sheet sheet = wb.createSheet("product");
+			
+			Row rowCol = sheet.createRow(0);
+			for(int i=0; i<table.getColumnCount(); i++) {
+				Cell cell = rowCol.createCell(i);
+				cell.setCellValue(table.getColumnName(i));
+			}
+			for(int j=0; j<table.getRowCount(); j++) {
+				Row row = sheet.createRow(j);
+				for(int k=0; k<table.getColumnCount(); k++) {
+					Cell cell = row.createCell(k);
+					if(table.getValueAt(j, k) != null) {
+						cell.setCellValue(table.getValueAt(j, k).toString());
+					}
+				}
+			}
+			try {
+				FileOutputStream out = new FileOutputStream(new File(saveFile.toString()));
+				try {
+					wb.write(out);
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				try {
+					wb.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				try {
+					out.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			} catch (FileNotFoundException e) {
+				JOptionPane.showMessageDialog(null,"Error: " + e);
+			}
+			
+			
+		}else {
+			JOptionPane.showMessageDialog(null, "Error");
+		}
+	}
 }
