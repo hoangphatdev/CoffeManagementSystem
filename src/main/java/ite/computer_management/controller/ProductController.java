@@ -8,6 +8,7 @@ import java.awt.event.MouseListener;
 
 import ite.computer_management.view.AddProductView;
 import ite.computer_management.view.Dashboard;
+import ite.computer_management.view.EditProductView;
 import ite.computer_management.view.ProductView;
 
 
@@ -28,7 +29,7 @@ public class ProductController implements MouseListener , KeyListener{
 		}else if(e.getSource() == productView.deleteLbl) {
 		    productView.clickDeleteLbl();
 		}else if(e.getSource() == productView.editLbl) {
-			
+			productView.clickEditBtn();
 		}else if(e.getSource() == productView.seeDetailLbl) {
 			
 		}else if(e.getSource() == productView.excelBtn) {
@@ -43,10 +44,6 @@ public class ProductController implements MouseListener , KeyListener{
 
 	@Override
 	public void mouseReleased(MouseEvent e) {
-		if(e.getSource() == productView.searchTxt) {
-			
-		}
-		
 	}
 
 	@Override

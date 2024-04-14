@@ -18,10 +18,11 @@ public class Product {
 	private int quantity;
 	private String computerType;
 	private Double weight;
+	private String origin;
 	public Product() {}
 	
 	public Product(String computerName, String computerCode, String brand, Double price, String cpu, int ram, String vga,
-			Double screenSize,  Double weight,String computerType, int quantity) {
+			Double screenSize,  Double weight,String computerType,String origin, int quantity) {
 		
 		this.computerName = computerName;
 		this.computerCode = computerCode;
@@ -33,6 +34,7 @@ public class Product {
 		this.price = price;
 		this.quantity = quantity;
 		this.computerType = computerType;
+		this.origin = origin;
 		this.weight = weight;
 	}
 
@@ -125,11 +127,17 @@ public class Product {
 	public void setWeight(Double weight) {
 		this.weight = weight;
 	}
+	public String getOrigin() {
+		return origin;
+	}
+	public void setOrigin(String origin) {
+		this.origin = origin;
+	}
 	@Override
 	public String toString() {
 		return "Computer [id=" + id + ", computerName=" + computerName + ", computerCode=" + computerCode + ", brand="
 				+ brand + ", cpu=" + cpu + ", ram=" + ram + ", vga=" + vga + ", screenSize=" + screenSize + ", price="
-				+ price + ", quantity=" + quantity + ", computerType=" + computerType + ", weight=" + weight
+				+ price + ", quantity=" + quantity + ", computerType=" + computerType + ", weight=" + weight + ", origin=" + origin
 				+ "]";
 	};
 	

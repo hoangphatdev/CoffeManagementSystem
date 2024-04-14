@@ -260,13 +260,13 @@ public class AddProductView extends JFrame {
 		Double screenSize = Double.parseDouble(screenSizeTxt.getText());
 		
 		Product com = new Product(computerName, computerCode, brand, price, cpu, ram, vga,
-				screenSize,weight , computerType, quantity);
+				screenSize,weight , computerType, origin, quantity);
 		
 		ProductDAO productdao = new ProductDAO();
 		productdao.insert(com);
 		
 		//front-end
-		String[] rowData = {computerName, computerCode, brand, String.valueOf(price), cpu, String.valueOf(ram), vga, String.valueOf(screenSize), String.valueOf(weight), computerType, String.valueOf(quantity)};
+		String[] rowData = {computerName, computerCode, brand, String.valueOf(price), cpu, String.valueOf(ram), vga, String.valueOf(screenSize), String.valueOf(weight), computerType, origin, String.valueOf(quantity)};
 		ProductView.model.addRow(rowData);
 	}
 	public void clickCancelLbl() {

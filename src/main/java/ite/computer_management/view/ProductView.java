@@ -47,13 +47,7 @@ public class ProductView extends JPanel {
 	public JButton excelBtn;
 	
 	
-
-	/**
-	 * Create the panel.
-	 */
-	
 	public ProductView() {
-		
 		ProductController productController = new ProductController(this);
 		
 		this.setSize(1032,763);
@@ -152,53 +146,71 @@ public class ProductView extends JPanel {
 		
 	}
 	public void clickExportExcel() {
-		JFileChooser jFileChooser = new JFileChooser();
-		jFileChooser.showSaveDialog(this);
-		File saveFile = jFileChooser.getSelectedFile();
 		
-		if(saveFile != null) {
-			saveFile = new File(saveFile.toString() + ".xlsx");
-			Workbook wb = new XSSFWorkbook();
-			Sheet sheet = wb.createSheet("product");
-			
-			Row rowCol = sheet.createRow(0);
-			for(int i=0; i<table.getColumnCount(); i++) {
-				Cell cell = rowCol.createCell(i);
-				cell.setCellValue(table.getColumnName(i));
-			}
-			for(int j=0; j<table.getRowCount(); j++) {
-				Row row = sheet.createRow(j);
-				for(int k=0; k<table.getColumnCount(); k++) {
-					Cell cell = row.createCell(k);
-					if(table.getValueAt(j, k) != null) {
-						cell.setCellValue(table.getValueAt(j, k).toString());
-					}
-				}
-			}
 			try {
-				FileOutputStream out = new FileOutputStream(new File(saveFile.toString()));
-				try {
+				JFileChooser jFileChooser = new JFileChooser();
+				jFileChooser.showSaveDialog(this);
+				File saveFile = jFileChooser.getSelectedFile();
+				
+				if(saveFile != null) {
+					saveFile = new File(saveFile.toString() + ".xlsx");
+					Workbook wb = new XSSFWorkbook();
+					Sheet sheet = wb.createSheet("product");
+					
+					Row rowCol = sheet.createRow(0);
+					for(int i=0; i<table.getColumnCount(); i++) {
+						Cell cell = rowCol.createCell(i);
+						cell.setCellValue(table.getColumnName(i));
+					}
+					for(int j=0; j<table.getRowCount(); j++) {
+						Row row = sheet.createRow(j);
+						for(int k=0; k<table.getColumnCount(); k++) {
+							Cell cell = row.createCell(k);
+							if(table.getValueAt(j, k) != null) {
+								cell.setCellValue(table.getValueAt(j, k).toString());
+							}
+						}
+					}
+					FileOutputStream out = new FileOutputStream(new File(saveFile.toString()));
 					wb.write(out);
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				try {
 					wb.close();
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-				try {
 					out.close();
-				} catch (IOException e) {
-					e.printStackTrace();
+					}
+			
+				}catch(FileNotFoundException e) {
+					JOptionPane.showMessageDialog(null, e);
+				}catch(IOException e) {
+					JOptionPane.showMessageDialog(null, e);
 				}
-			} catch (FileNotFoundException e) {
-				JOptionPane.showMessageDialog(null,"Error: " + e);
-			}
-			
-			
+	
+    }
+	public void clickEditBtn() {
+		
+		int rowCount= table.getSelectedRowCount(); 
+		int selectedRowIndex = table.getSelectedRow();
+		if(rowCount ==1) { 
+			EditProductView editProductView = new EditProductView(this);
+			editProductView.computerNameTxt.setText((String)model.getValueAt(selectedRowIndex,0));
+			editProductView.computerCodeTxt.setText((String)model.getValueAt(selectedRowIndex, 1));
+			editProductView.brandTxt.setText((String)model.getValueAt(selectedRowIndex, 2));
+			editProductView.priceTxt.setText((String)model.getValueAt(selectedRowIndex, 3));
+			editProductView.cpuTxt.setText((String)model.getValueAt(selectedRowIndex, 4));
+			editProductView.ramTxt.setText((String)model.getValueAt(selectedRowIndex, 5));
+			editProductView.vgaTxt.setText((String)model.getValueAt(selectedRowIndex, 6));
+			editProductView.screenSizeTxt.setText((String)model.getValueAt(selectedRowIndex, 7));
+			editProductView.weightTxt.setText((String)model.getValueAt(selectedRowIndex, 8));
+			editProductView.computerTypeTxt.setText((String)model.getValueAt(selectedRowIndex, 9));
+			editProductView.originTxt.setText((String)model.getValueAt(selectedRowIndex, 10));
+			editProductView.quantityTxt.setText((String)model.getValueAt(selectedRowIndex, 11));
+		
 		}else {
-			JOptionPane.showMessageDialog(null, "Error");
+			JOptionPane.showMessageDialog(null, "Please select row of data that needs editing >< ");
+			
 		}
+		
 	}
+	
+	
+	
 }
+

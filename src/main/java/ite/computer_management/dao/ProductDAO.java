@@ -32,7 +32,7 @@ public class ProductDAO implements DAOInterface<Product> {
 		int check = 0;
 		Connection connect = ConnectDatabase.getInstance().getConnection();
 		try {
-			String sql = "INSERT INTO computer_management.product(computer_name, computer_code, brand, price, cpu, ram, vga, screen_size, weight, computer_type, quantity) VALUE"
+			String sql = "INSERT INTO computer_management.product(computer_name, computer_code, brand, price, cpu, ram, vga, screen_size, weight, computer_type,origin, quantity) VALUE"
 					+ "(?,?,?,?,?,?,?,?,?,?,?)";
 			PreparedStatement ps = connect.prepareStatement(sql);
 			ps.setString(1, t.getComputerName());
@@ -45,7 +45,8 @@ public class ProductDAO implements DAOInterface<Product> {
 			ps.setDouble(8, t.getScreenSize());
 			ps.setDouble(9, t.getWeight());
 			ps.setString(10, t.getComputerType());
-			ps.setInt(11, t.getQuantity());
+			ps.setString(11, t.getOrigin());
+			ps.setInt(12, t.getQuantity());
 			
 			check = ps.executeUpdate();	
 			connect.close();
@@ -80,10 +81,10 @@ public class ProductDAO implements DAOInterface<Product> {
 	}
 
 	@Override
-	public int update(Product t) {
+	public int update(Product t, String condition) {
 		int check = 0;
 		Connection connect = ConnectDatabase.getInstance().getConnection();
-		String sql = "UPDATE computer_management.product SET computer_name=?, computer_code=?, brand=?, price=?, cpu=?, ram=?, vga=?, screen_size=?, weight=?, computer_type=?, quantity=?"
+		String sql = "UPDATE computer_management.product SET computer_name=?, computer_code=?, brand=?, price=?, cpu=?, ram=?, vga=?, screen_size=?, weight=?, computer_type=?,origin=?, quantity=?"
 				+ "WHERE id=?";
 		try {
 			PreparedStatement ps = connect.prepareStatement(sql);
@@ -97,7 +98,9 @@ public class ProductDAO implements DAOInterface<Product> {
 			ps.setDouble(8, t.getScreenSize());
 			ps.setDouble(9, t.getWeight());
 			ps.setString(10, t.getComputerType());
-			ps.setInt(11, t.getQuantity());
+			ps.setString(11, t.getOrigin());
+			ps.setInt(12, t.getQuantity());
+			ps.setString(13, condition);
 			check = ps.executeUpdate();
 			connect.close();
 			JOptionPane.showMessageDialog(null, "Edit successfully ><");
@@ -121,12 +124,12 @@ public class ProductDAO implements DAOInterface<Product> {
 		
 			int cols = rsmd.getColumnCount();
 //			String[] colName = new String[cols];
-			String[] colName = {"computerName", "computerCode", "brand", "price", "cpu", "ram", "vga", "screenSize", "weight", "computerType", "quantity"};
+			String[] colName = {"computerName", "computerCode", "brand", "price", "cpu", "ram", "vga", "screenSize", "weight", "computerType","origin", "quantity"};
 //			for(int i=0; i<cols; i++) {
 //				colName[i] = rsmd.getColumnClassName(i+1); //thu tu cot bat dau tu 1
 //			}
 			productView.model.setColumnIdentifiers(colName);
-			String computerName, computerCode, brand, cpu, vga, computerType;
+			String computerName, computerCode, brand, cpu, vga, computerType, origin;
 			int quantity, ram;
 			Double price, screen_size, weight;
 			while(rs.next()) {
@@ -140,8 +143,9 @@ public class ProductDAO implements DAOInterface<Product> {
 				screen_size = rs.getDouble(9);
 				weight = rs.getDouble(10);
 				computerType = rs.getString(11);
-				quantity = rs.getInt(12);
-				String[] row = { computerName, computerCode, brand, String.valueOf(price), cpu, String.valueOf(ram), vga, String.valueOf(screen_size), String.valueOf(weight), computerType, String.valueOf(quantity)};
+				origin = rs.getString(12);
+				quantity = rs.getInt(13);
+				String[] row = { computerName, computerCode, brand, String.valueOf(price), cpu, String.valueOf(ram), vga, String.valueOf(screen_size), String.valueOf(weight), computerType, origin, String.valueOf(quantity)};
 				productView.model.addRow(row);
 			}
 			connect.close();
@@ -162,6 +166,11 @@ public class ProductDAO implements DAOInterface<Product> {
 	public ArrayList<Product> selectByCondition(String condition) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+	@Override
+	public int update(Product t) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 
